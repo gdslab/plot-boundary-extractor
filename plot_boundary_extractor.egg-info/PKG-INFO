@@ -1,0 +1,65 @@
+Metadata-Version: 2.2
+Name: plot_boundary_extractor
+Version: 0.3.0
+Summary: Plot boundary extractor using segment anything model
+Author: Hansae Kim
+Author-email: kim4012@purdue.edu
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10, <3.12
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: d2spy
+Requires-Dist: fiona
+Requires-Dist: geojson
+Requires-Dist: geopandas
+Requires-Dist: jupyter
+Requires-Dist: leafmap
+Requires-Dist: numpy
+Requires-Dist: opencv-python
+Requires-Dist: pandas
+Requires-Dist: pyproj
+Requires-Dist: rasterio
+Requires-Dist: scikit-image
+Requires-Dist: scikit-learn
+Requires-Dist: shapely
+Requires-Dist: openrs-python
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# plot-boundary-extractor
+plot boundary extractor using segment anything model
+
+
+# Install virtual environment
+```bash
+conda create -n pbe -c conda-forge gdal python=3.10 -y
+conda activate pbe
+```
+
+# Install sam plot extraction tool
+```bash
+pip install sam-plot-extraction
+```
+
+# Install torch
+```bash
+(CPU)
+pip install torch torchvision
+(GPU)
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+```
+
+# Install SAM and download checkpoint file
+```bash
+pip install git+https://github.com/facebookresearch/segment-anything.git
+
+wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
+```

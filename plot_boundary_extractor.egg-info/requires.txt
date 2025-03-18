@@ -1,0 +1,15 @@
+d2spy
+fiona
+geojson
+geopandas
+jupyter
+leafmap
+numpy
+opencv-python
+pandas
+pyproj
+rasterio
+scikit-image
+scikit-learn
+shapely
+openrs-python
