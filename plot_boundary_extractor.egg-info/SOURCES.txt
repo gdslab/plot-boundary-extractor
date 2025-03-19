@@ -1,8 +1,8 @@
 LICENSE
 README.md
 setup.py
-plot-boundary-extractor/__init__.py
-plot-boundary-extractor/plot_extraction.py
+plot_boundary_extractor/__init__.py
+plot_boundary_extractor/plot_extraction.py
 plot_boundary_extractor.egg-info/PKG-INFO
 plot_boundary_extractor.egg-info/SOURCES.txt
 plot_boundary_extractor.egg-info/dependency_links.txt

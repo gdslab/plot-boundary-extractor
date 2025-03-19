@@ -1,1 +1,1 @@
-plot-boundary-extractor
+plot_boundary_extractor
