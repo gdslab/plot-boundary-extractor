@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='plot_boundary_extractor',  # Replace with your package name
-    version='0.3.1',
+    version='0.3.2',
     author='Hansae Kim',
     author_email='kim4012@purdue.edu',
     description='Plot boundary extractor using segment anything model',

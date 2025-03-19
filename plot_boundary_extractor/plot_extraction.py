@@ -266,9 +266,9 @@ class PlotExtraction(LightImage):
         gdf = gpd.GeoDataFrame(plot_rotated, geometry='geometry')
         
         if self.cent_local:
-            self.cent_local = cent_loc
-        else:
             self.cent_local += cent_loc
+        else:
+            self.cent_local = cent_loc            
         
         return gdf
         
@@ -638,9 +638,11 @@ class PlotExtraction(LightImage):
     def delete(self, id):
         
         self.gdf_final.drop(index=id, inplace = True)
-        
-        return self.gdf_final
-    
+        self.gdf_final.set_crs(f"EPSG:{self.epsg}", inplace=True)
+        gdf_geojson = self.to_geojson(self.gdf_final, rotation=False)
+        self.final_geojson = gdf_geojson
+        print(f"Successfully removed plot {id}")
+            
     
     def add(self, polygon):
         
@@ -679,18 +681,29 @@ class PlotExtraction(LightImage):
             box=np.array([xmin,ymin,xmax,ymax]),
             multimask_output=False,
         )
-        self.added_mask = mask[0,:,:]
         
-        gdf_prev = self.gdf_final
-        gdf_prev['geometry'] = gdf_prev['geometry'].apply(lambda geom: rotate(geom, self.slope_deg, origin=self.center_geo, use_radians=False))
-        
-        gdf_added = self.mask2polygon([mask[0,:,:]])
-        gdf_concat = gpd.GeoDataFrame(pd.concat([gdf_prev, gdf_added], ignore_index=True))
-        
-        gdf_assigned = self.assign_row_col(gdf_concat)
-        gdf_assigned['geometry'] = gdf_assigned['geometry'].apply(lambda geom: rotate(geom, -self.slope_deg, origin=self.center_geo, use_radians=False))
-        gdf_assigned.set_crs(f'EPSG:{self.epsg}', inplace=True)
-        self.gdf_final = gdf_assigned
+        if len(mask) > 0:
+            print("Missing plot detected")
+            self.added_mask = mask[0,:,:]
+            
+            gdf_prev = self.gdf_final
+            gdf_prev['geometry'] = gdf_prev['geometry'].apply(lambda geom: rotate(geom, self.slope_deg, origin=self.center_geo, use_radians=False))
+            
+            gdf_added = self.mask2polygon([mask[0,:,:]])
+            gdf_concat = gpd.GeoDataFrame(pd.concat([gdf_prev, gdf_added], ignore_index=True))
+            
+            gdf_assigned = self.assign_row_col(gdf_concat)
+            gdf_assigned['geometry'] = gdf_assigned['geometry'].apply(lambda geom: rotate(geom, -self.slope_deg, origin=self.center_geo, use_radians=False))
+            gdf_assigned.set_crs(f'EPSG:{self.epsg}', inplace=True)
+            self.gdf_final = gdf_assigned
+            print("Successfully added the missing plot")
+            
+            gdf_geojson = self.to_geojson(gdf_assigned, rotation=False)
+            self.final_geojson = gdf_geojson
+        else:
+            print("No missing plot detected")
+            
+            return
         
         # polygon = polygonize(mask[0,:,:], convex=True, simplify_tolerance=1.0)[0]
         
@@ -736,8 +749,6 @@ class PlotExtraction(LightImage):
         # gdf = gpd.GeoDataFrame(pd.concat([gdf, bbox_gdf], ignore_index=True))
         # gdf.set_crs(f'EPSG:{self.epsg}', inplace=True)
         # self.gdf_final = gdf
-        
-        return gdf_assigned
     
     
     def to_geojson(self, gdf, rotation=False):
@@ -749,6 +760,26 @@ class PlotExtraction(LightImage):
         gdf_geojson = gdf_4326.to_json()
         
         return gdf_geojson
+    
+    
+    def show(self, lmap):
+        
+        lmap.clear_layers()
+        lmap.add_basemap("USGS NAIP Imagery")
+        lmap.add_cog_layer(self.data_product_url, name="ortho", zoom_to_layer=True)
+        lmap.add_geojson(self.final_geojson, layer_name="Manually removed plot boundary", 
+                    style={"color": "cyan", "weight": 1, "fill": False}, zoom_to_layer=True)
+        
+        return lmap
+    
+    def to_file(self, filename):
+        
+        if filename.endswith('.geojson'):
+            with open(filename, 'w') as f:
+                f.write(self.final_geojson)
+                print(f"GeoJSON file saved to {filename}")
+        else:
+            raise ValueError("Filename must end with '.geojson'")
     
     
     def evaluation(self, gt_filename, result_filename=None):
@@ -919,5 +950,3 @@ class PlotExtraction(LightImage):
         
         self.final_geojson = gdf_geojson
         self.clear_sam()
-        
-        return gdf_geojson

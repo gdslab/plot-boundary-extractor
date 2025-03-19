@@ -1,6 +1,6 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: plot_boundary_extractor
-Version: 0.3.1
+Version: 0.3.2
 Summary: Plot boundary extractor using segment anything model
 Author: Hansae Kim
 Author-email: kim4012@purdue.edu
@@ -30,6 +30,7 @@ Dynamic: author-email
 Dynamic: classifier
 Dynamic: description
 Dynamic: description-content-type
+Dynamic: license-file
 Dynamic: requires-dist
 Dynamic: requires-python
 Dynamic: summary
