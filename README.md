@@ -2,9 +2,11 @@
 
 This module is to extract field experiment plot boundaries for agricultural applications. This module was initially developed for wheat breeding trials, but it can also extract plot boundaries for other row crops. More tests will be done and shared in the future. 
 
+This repository is associated with our research on **Developing a segment anything model-based framework for automated plot extraction**, which has been submitted to *Precision Agriculture* journal and is currently under review. Citation information will become available when the paper is published. 
+
 ---
 
-*Developed by [Hansae Kim](https://gdsl.org/team/hansae-kim/) and [Jinha Jung](https://gdsl.org/team/jinha-jung/)*
+*This module was developed by [Geospatial Data Science Lab](https://gdsl.org) at Purdue University. If you have any questions, you can create an issue in this repository or contact Hansae Kim (kim4012@purdue.edu) or Jinha Jung (jinha@purdue.edu).*
 
 ## `plot-boundary-extractor` installation
 
